@@ -1,0 +1,27 @@
+{
+  "name": "ether-stats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seanyesmunt/ether-stats.git"
+  },
+  "author": "Sean Yesmunt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seanyesmunt/ether-stats/issues"
+  },
+  "homepage": "https://github.com/seanyesmunt/ether-stats#readme",
+  "dependencies": {
+    "axios": "^0.16.1",
+    "next": "^2.4.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}
