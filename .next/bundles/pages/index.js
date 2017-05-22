@@ -3,7 +3,7 @@
             var comp = module.exports =
 webpackJsonp([5],{
 
-/***/ 559:
+/***/ 566:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33,11 +33,15 @@ var _inherits2 = __webpack_require__(45);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
+var _style = __webpack_require__(590);
+
+var _style2 = _interopRequireDefault(_style);
+
 var _react = __webpack_require__(11);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _axios = __webpack_require__(568);
+var _axios = __webpack_require__(567);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -46,8 +50,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _jsxFileName = '/Users/seanyesmunt/Workspace/ether-stats/pages/index.js?entry';
 
 
-var API = 'https://ether-stats-server-xjsvfatawq.now.sh';
-// const API = 'http://localhost:5000'
+var API = 'https://ether-stats-server-wbffcbisdb.now.sh';
 var WALLET = 'be6Ab449bBa5E9e8E5A81d76D860EFcB4Acaa10F';
 
 var App = function (_Component) {
@@ -60,6 +63,7 @@ var App = function (_Component) {
 
     _this.state = {
       loading: true,
+      error: false,
       data: {}
     };
     return _this;
@@ -75,15 +79,16 @@ var App = function (_Component) {
 
         _this2.setState({ data: data, loading: false });
       }).catch(function (err) {
-        return console.log('err', err);
+        console.log('err', err);
+        _this2.setState({ loading: false, error: err });
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      console.log('render', this.state);
       var _state = this.state,
           loading = _state.loading,
+          error = _state.error,
           _state$data = _state.data,
           hashRate = _state$data.hashRate,
           ethPerMin = _state$data.ethPerMin,
@@ -93,48 +98,94 @@ var App = function (_Component) {
       // not sure why they give us unpaid in this format
 
       var unpaidEth = unpaid / 1000000000000000000;
+      var minutesForOneEther = 1 / ethPerMin;
+      var hoursForOneEther = minutesForOneEther / 60;
+      var daysForOneEther = (hoursForOneEther / 24).toFixed(0);
 
-      return _react2.default.createElement('div', {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 33
-        }
-      }, _react2.default.createElement('h1', {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 34
-        }
-      }, 'Ethminer stats for ', WALLET), loading && _react2.default.createElement('p', {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 35
-        }
-      }, 'Loading...'), !loading && _react2.default.createElement('div', {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 37
-        }
-      }, _react2.default.createElement('div', {
+      return _react2.default.createElement('div', { className: 'container', 'data-jsx': 2027089461,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 38
         }
-      }, 'Hash rate: ', hashRate), _react2.default.createElement('div', {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 39
-        }
-      }, 'eth/min: ', ethPerMin, ' eth'), _react2.default.createElement('div', {
+      }, error && error.message, _react2.default.createElement('h1', {
+        'data-jsx': 2027089461,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 40
         }
-      }, '$/min: $', usdPerMin), _react2.default.createElement('div', {
+      }, 'Ethminer stats'), _react2.default.createElement('h2', {
+        'data-jsx': 2027089461,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 41
         }
-      }, 'unpaid: ', unpaid / 1000000000000000000, ' eth')));
+      }, 'Wallet: ', WALLET), loading && _react2.default.createElement('p', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 42
+        }
+      }, 'Loading...'), !loading && _react2.default.createElement('div', { className: 'stats', 'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 44
+        }
+      }, _react2.default.createElement('div', { className: 'hash-rate', 'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 45
+        }
+      }, hashRate), _react2.default.createElement('div', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 46
+        }
+      }, 'Currently mining ', _react2.default.createElement('strong', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 46
+        }
+      }, ethPerMin), ' eth / minute'), _react2.default.createElement('div', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 47
+        }
+      }, 'At the current rate, it will take ', _react2.default.createElement('strong', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 47
+        }
+      }, daysForOneEther, ' days'), ' to mine ', _react2.default.createElement('strong', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 47
+        }
+      }, '1 eth')), _react2.default.createElement('div', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 48
+        }
+      }, 'Currently mining $', usdPerMin, ' / min'), _react2.default.createElement('div', { className: 'unpaid', 'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 50
+        }
+      }, 'Unpaid balance: ', _react2.default.createElement('strong', {
+        'data-jsx': 2027089461,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 50
+        }
+      }, unpaidEth), ' eth')), _react2.default.createElement(_style2.default, {
+        styleId: 2027089461,
+        css: '.container[data-jsx="2027089461"] {padding: 10px;font-family: Helvetica, sans-serif;}.stats[data-jsx="2027089461"] div[data-jsx="2027089461"] {padding: 20px 0;}h1[data-jsx="2027089461"] {font-size: 1.3em;}h2[data-jsx="2027089461"] {font-size: 1em;}.hash-rate[data-jsx="2027089461"] {font-size: 2em;font-weight: 600;}.unpaid[data-jsx="2027089461"] {font-size: 1.5em;}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhZ2VzL2luZGV4LmpzP2VudHJ5Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQW9Eb0IsQUFDSSxtQ0FDSSxjQUNxQixtQ0FDcEMsQ0FDVywwREFDTSxnQkFDakIsQ0FFRywyQkFDZSxpQkFDbEIsQ0FFRywyQkFDYSxlQUNoQixDQUVXLG1DQUNLLGVBQ0UsaUJBQ2xCLENBRVEsZ0NBQ1UsaUJBQ2xCIiwiZmlsZSI6InBhZ2VzL2luZGV4LmpzP2VudHJ5Iiwic291cmNlUm9vdCI6Ii9Vc2Vycy9zZWFueWVzbXVudC9Xb3Jrc3BhY2UvZXRoZXItc3RhdHMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QsIHsgQ29tcG9uZW50IH0gZnJvbSAncmVhY3QnXG5pbXBvcnQgYXhpb3MgZnJvbSAnYXhpb3MnXG5cbmNvbnN0IEFQSSA9ICdodHRwczovL2V0aGVyLXN0YXRzLXNlcnZlci13YmZmY2Jpc2RiLm5vdy5zaCdcbmNvbnN0IFdBTExFVCA9ICdiZTZBYjQ0OWJCYTVFOWU4RTVBODFkNzZEODYwRUZjQjRBY2FhMTBGJ1xuXG5jbGFzcyBBcHAgZXh0ZW5kcyBDb21wb25lbnQge1xuICBjb25zdHJ1Y3RvcigpIHtcbiAgICBzdXBlcigpXG5cbiAgICB0aGlzLnN0YXRlID0ge1xuICAgICAgbG9hZGluZzogdHJ1ZSxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGRhdGE6IHt9XG4gICAgfVxuICB9XG4gIGNvbXBvbmVudERpZE1vdW50KCkge1xuICAgIGF4aW9zLmdldChgJHtBUEl9LyR7V0FMTEVUfWApXG4gICAgICAudGhlbigoeyBkYXRhIH0pID0+IHtcbiAgICAgICAgdGhpcy5zZXRTdGF0ZSh7IGRhdGEsIGxvYWRpbmc6IGZhbHNlIH0pXG4gICAgICB9KVxuICAgICAgLmNhdGNoKChlcnIpID0+IHtcbiAgICAgICAgY29uc29sZS5sb2coJ2VycicsIGVycilcbiAgICAgICAgdGhpcy5zZXRTdGF0ZSh7IGxvYWRpbmc6IGZhbHNlLCBlcnJvcjogZXJyIH0pXG4gICAgICB9KVxuICB9XG5cbiAgcmVuZGVyKCkge1xuICAgIGNvbnN0IHsgbG9hZGluZywgZXJyb3IsIGRhdGE6IHsgaGFzaFJhdGUsIGV0aFBlck1pbiwgdXNkUGVyTWluLCB1bnBhaWQgfSB9ID0gdGhpcy5zdGF0ZVxuXG4gICAgLy8gbm90IHN1cmUgd2h5IHRoZXkgZ2l2ZSB1cyB1bnBhaWQgaW4gdGhpcyBmb3JtYXRcbiAgICBjb25zdCB1bnBhaWRFdGggPSB1bnBhaWQgLyAxMDAwMDAwMDAwMDAwMDAwMDAwXG4gICAgY29uc3QgbWludXRlc0Zvck9uZUV0aGVyID0gMSAvIGV0aFBlck1pblxuICAgIGNvbnN0IGhvdXJzRm9yT25lRXRoZXIgPSBtaW51dGVzRm9yT25lRXRoZXIgLyA2MFxuICAgIGNvbnN0IGRheXNGb3JPbmVFdGhlciA9IChob3Vyc0Zvck9uZUV0aGVyIC8gMjQpLnRvRml4ZWQoMClcblxuICAgIHJldHVybiAoXG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cImNvbnRhaW5lclwiPlxuICAgICAgICB7ZXJyb3IgJiYgZXJyb3IubWVzc2FnZX1cbiAgICAgICAgPGgxPkV0aG1pbmVyIHN0YXRzPC9oMT5cbiAgICAgICAgPGgyPldhbGxldDoge1dBTExFVH08L2gyPlxuICAgICAgICB7bG9hZGluZyAmJiA8cD5Mb2FkaW5nLi4uPC9wPn1cbiAgICAgICAgeyFsb2FkaW5nICYmIChcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInN0YXRzXCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImhhc2gtcmF0ZVwiPntoYXNoUmF0ZX08L2Rpdj5cbiAgICAgICAgICAgIDxkaXY+Q3VycmVudGx5IG1pbmluZyA8c3Ryb25nPntldGhQZXJNaW59PC9zdHJvbmc+IGV0aCAvIG1pbnV0ZTwvZGl2PlxuICAgICAgICAgICAgPGRpdj5BdCB0aGUgY3VycmVudCByYXRlLCBpdCB3aWxsIHRha2UgPHN0cm9uZz57ZGF5c0Zvck9uZUV0aGVyfSBkYXlzPC9zdHJvbmc+IHRvIG1pbmUgPHN0cm9uZz4xIGV0aDwvc3Ryb25nPjwvZGl2PlxuICAgICAgICAgICAgPGRpdj5DdXJyZW50bHkgbWluaW5nICR7dXNkUGVyTWlufSAvIG1pbjwvZGl2PlxuXG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInVucGFpZFwiPlVucGFpZCBiYWxhbmNlOiA8c3Ryb25nPnt1bnBhaWRFdGh9PC9zdHJvbmc+IGV0aDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICApfVxuICAgICAgICA8c3R5bGUganN4PntgXG4gICAgICAgICAgICAuY29udGFpbmVyIHtcbiAgICAgICAgICAgICAgcGFkZGluZzogMTBweDtcbiAgICAgICAgICAgICAgZm9udC1mYW1pbHk6IEhlbHZldGljYSwgc2Fucy1zZXJpZjtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIC5zdGF0cyBkaXYge1xuICAgICAgICAgICAgICBwYWRkaW5nOiAyMHB4IDA7XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIGgxIHtcbiAgICAgICAgICAgICAgZm9udC1zaXplOiAxLjNlbTtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgaDIge1xuICAgICAgICAgICAgICBmb250LXNpemU6IDFlbTtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgLmhhc2gtcmF0ZSB7XG4gICAgICAgICAgICAgIGZvbnQtc2l6ZTogMmVtO1xuICAgICAgICAgICAgICBmb250LXdlaWdodDogNjAwO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICAudW5wYWlkIHtcbiAgICAgICAgICAgICAgZm9udC1zaXplOiAxLjVlbTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICBgfVxuICAgICAgICA8L3N0eWxlPlxuICAgICAgPC9kaXY+XG4gICAgKVxuICB9XG59XG5cbmV4cG9ydCBkZWZhdWx0IEFwcFxuIl19 */\n/*@ sourceURL=pages/index.js?entry */'
+      }));
     }
   }]);
 
@@ -171,16 +222,16 @@ exports.default = App;
 
 /***/ }),
 
-/***/ 560:
+/***/ 589:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(559);
+module.exports = __webpack_require__(566);
 
 
 /***/ })
 
-},[560]);
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYnVuZGxlcy9wYWdlcy9pbmRleC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3BhZ2VzP2JjNmJhNjEiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0LCB7IENvbXBvbmVudCB9IGZyb20gJ3JlYWN0J1xuaW1wb3J0IGF4aW9zIGZyb20gJ2F4aW9zJ1xuXG5jb25zdCBBUEkgPSAnaHR0cHM6Ly9ldGhlci1zdGF0cy1zZXJ2ZXIteGpzdmZhdGF3cS5ub3cuc2gnXG4vLyBjb25zdCBBUEkgPSAnaHR0cDovL2xvY2FsaG9zdDo1MDAwJ1xuY29uc3QgV0FMTEVUID0gJ2JlNkFiNDQ5YkJhNUU5ZThFNUE4MWQ3NkQ4NjBFRmNCNEFjYWExMEYnXG5cbmNsYXNzIEFwcCBleHRlbmRzIENvbXBvbmVudCB7XG4gIGNvbnN0cnVjdG9yKCkge1xuICAgIHN1cGVyKClcblxuICAgIHRoaXMuc3RhdGUgPSB7XG4gICAgICBsb2FkaW5nOiB0cnVlLFxuICAgICAgZGF0YToge31cbiAgICB9XG4gIH1cbiAgY29tcG9uZW50RGlkTW91bnQoKSB7XG4gICAgYXhpb3MuZ2V0KGAke0FQSX0vJHtXQUxMRVR9YClcbiAgICAgIC50aGVuKCh7IGRhdGEgfSkgPT4ge1xuICAgICAgICB0aGlzLnNldFN0YXRlKHsgZGF0YSwgbG9hZGluZzogZmFsc2UgfSlcbiAgICAgIH0pXG4gICAgICAuY2F0Y2goKGVycikgPT4gY29uc29sZS5sb2coJ2VycicsIGVycikpXG4gIH1cblxuICByZW5kZXIoKSB7XG4gICAgY29uc29sZS5sb2coJ3JlbmRlcicsIHRoaXMuc3RhdGUpO1xuICAgIGNvbnN0IHsgbG9hZGluZywgZGF0YTogeyBoYXNoUmF0ZSwgZXRoUGVyTWluLCB1c2RQZXJNaW4sIHVucGFpZCB9IH0gPSB0aGlzLnN0YXRlXG5cbiAgICAvLyBub3Qgc3VyZSB3aHkgdGhleSBnaXZlIHVzIHVucGFpZCBpbiB0aGlzIGZvcm1hdFxuICAgIGNvbnN0IHVucGFpZEV0aCA9IHVucGFpZCAvIDEwMDAwMDAwMDAwMDAwMDAwMDBcblxuICAgIHJldHVybiAoXG4gICAgICA8ZGl2PlxuICAgICAgICA8aDE+RXRobWluZXIgc3RhdHMgZm9yIHtXQUxMRVR9PC9oMT5cbiAgICAgICAge2xvYWRpbmcgJiYgPHA+TG9hZGluZy4uLjwvcD59XG4gICAgICAgIHshbG9hZGluZyAmJiAoXG4gICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgIDxkaXY+SGFzaCByYXRlOiB7aGFzaFJhdGV9PC9kaXY+XG4gICAgICAgICAgICA8ZGl2PmV0aC9taW46IHtldGhQZXJNaW59IGV0aDwvZGl2PlxuICAgICAgICAgICAgPGRpdj4kL21pbjogJHt1c2RQZXJNaW59PC9kaXY+XG4gICAgICAgICAgICA8ZGl2PnVucGFpZDoge3VucGFpZCAvIDEwMDAwMDAwMDAwMDAwMDAwMDB9IGV0aDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICApfVxuICAgICAgPC9kaXY+XG4gICAgKVxuICB9XG59XG5cbmV4cG9ydCBkZWZhdWx0IEFwcFxuXG5cblxuLy8gV0VCUEFDSyBGT09URVIgLy9cbi8vIC4vcGFnZXM/ZW50cnkiXSwibWFwcGluZ3MiOiI7QTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQTtBQUNBOzs7QUFBQTtBQUNBOzs7Ozs7OztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBREE7QUFBQTtBQUNBO0FBRUE7QUFDQTtBQURBO0FBRUE7QUFBQTtBQURBO0FBR0E7Ozs7O0FBQ0E7QUFDQTtBQUNBO0FBREE7QUFDQTtBQUNBO0FBQUE7QUFGQTtBQUlBO0FBQ0E7Ozs7QUFHQTtBQUFBO0FBQ0E7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFDQTtBQUVBO0FBQ0E7QUFEQTtBQUNBO0FBRUE7O0FBQUE7QUFDQTtBQURBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7O0FBRUE7QUFDQTtBQURBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7Ozs7O0FBUUE7QUFDQTtBQURBO0FBQ0E7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QSIsInNvdXJjZVJvb3QiOiIifQ==
+},[589]);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYnVuZGxlcy9wYWdlcy9pbmRleC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3BhZ2VzPzU4MjVkYTciXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0LCB7IENvbXBvbmVudCB9IGZyb20gJ3JlYWN0J1xuaW1wb3J0IGF4aW9zIGZyb20gJ2F4aW9zJ1xuXG5jb25zdCBBUEkgPSAnaHR0cHM6Ly9ldGhlci1zdGF0cy1zZXJ2ZXItd2JmZmNiaXNkYi5ub3cuc2gnXG5jb25zdCBXQUxMRVQgPSAnYmU2QWI0NDliQmE1RTllOEU1QTgxZDc2RDg2MEVGY0I0QWNhYTEwRidcblxuY2xhc3MgQXBwIGV4dGVuZHMgQ29tcG9uZW50IHtcbiAgY29uc3RydWN0b3IoKSB7XG4gICAgc3VwZXIoKVxuXG4gICAgdGhpcy5zdGF0ZSA9IHtcbiAgICAgIGxvYWRpbmc6IHRydWUsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBkYXRhOiB7fVxuICAgIH1cbiAgfVxuICBjb21wb25lbnREaWRNb3VudCgpIHtcbiAgICBheGlvcy5nZXQoYCR7QVBJfS8ke1dBTExFVH1gKVxuICAgICAgLnRoZW4oKHsgZGF0YSB9KSA9PiB7XG4gICAgICAgIHRoaXMuc2V0U3RhdGUoeyBkYXRhLCBsb2FkaW5nOiBmYWxzZSB9KVxuICAgICAgfSlcbiAgICAgIC5jYXRjaCgoZXJyKSA9PiB7XG4gICAgICAgIGNvbnNvbGUubG9nKCdlcnInLCBlcnIpXG4gICAgICAgIHRoaXMuc2V0U3RhdGUoeyBsb2FkaW5nOiBmYWxzZSwgZXJyb3I6IGVyciB9KVxuICAgICAgfSlcbiAgfVxuXG4gIHJlbmRlcigpIHtcbiAgICBjb25zdCB7IGxvYWRpbmcsIGVycm9yLCBkYXRhOiB7IGhhc2hSYXRlLCBldGhQZXJNaW4sIHVzZFBlck1pbiwgdW5wYWlkIH0gfSA9IHRoaXMuc3RhdGVcblxuICAgIC8vIG5vdCBzdXJlIHdoeSB0aGV5IGdpdmUgdXMgdW5wYWlkIGluIHRoaXMgZm9ybWF0XG4gICAgY29uc3QgdW5wYWlkRXRoID0gdW5wYWlkIC8gMTAwMDAwMDAwMDAwMDAwMDAwMFxuICAgIGNvbnN0IG1pbnV0ZXNGb3JPbmVFdGhlciA9IDEgLyBldGhQZXJNaW5cbiAgICBjb25zdCBob3Vyc0Zvck9uZUV0aGVyID0gbWludXRlc0Zvck9uZUV0aGVyIC8gNjBcbiAgICBjb25zdCBkYXlzRm9yT25lRXRoZXIgPSAoaG91cnNGb3JPbmVFdGhlciAvIDI0KS50b0ZpeGVkKDApXG5cbiAgICByZXR1cm4gKFxuICAgICAgPGRpdiBjbGFzc05hbWU9XCJjb250YWluZXJcIj5cbiAgICAgICAge2Vycm9yICYmIGVycm9yLm1lc3NhZ2V9XG4gICAgICAgIDxoMT5FdGhtaW5lciBzdGF0czwvaDE+XG4gICAgICAgIDxoMj5XYWxsZXQ6IHtXQUxMRVR9PC9oMj5cbiAgICAgICAge2xvYWRpbmcgJiYgPHA+TG9hZGluZy4uLjwvcD59XG4gICAgICAgIHshbG9hZGluZyAmJiAoXG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJzdGF0c1wiPlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJoYXNoLXJhdGVcIj57aGFzaFJhdGV9PC9kaXY+XG4gICAgICAgICAgICA8ZGl2PkN1cnJlbnRseSBtaW5pbmcgPHN0cm9uZz57ZXRoUGVyTWlufTwvc3Ryb25nPiBldGggLyBtaW51dGU8L2Rpdj5cbiAgICAgICAgICAgIDxkaXY+QXQgdGhlIGN1cnJlbnQgcmF0ZSwgaXQgd2lsbCB0YWtlIDxzdHJvbmc+e2RheXNGb3JPbmVFdGhlcn0gZGF5czwvc3Ryb25nPiB0byBtaW5lIDxzdHJvbmc+MSBldGg8L3N0cm9uZz48L2Rpdj5cbiAgICAgICAgICAgIDxkaXY+Q3VycmVudGx5IG1pbmluZyAke3VzZFBlck1pbn0gLyBtaW48L2Rpdj5cblxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJ1bnBhaWRcIj5VbnBhaWQgYmFsYW5jZTogPHN0cm9uZz57dW5wYWlkRXRofTwvc3Ryb25nPiBldGg8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgKX1cbiAgICAgICAgPHN0eWxlIGpzeD57YFxuICAgICAgICAgICAgLmNvbnRhaW5lciB7XG4gICAgICAgICAgICAgIHBhZGRpbmc6IDEwcHg7XG4gICAgICAgICAgICAgIGZvbnQtZmFtaWx5OiBIZWx2ZXRpY2EsIHNhbnMtc2VyaWY7XG4gICAgICAgICAgICB9XG4gICAgICAgICAgICAuc3RhdHMgZGl2IHtcbiAgICAgICAgICAgICAgcGFkZGluZzogMjBweCAwO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBoMSB7XG4gICAgICAgICAgICAgIGZvbnQtc2l6ZTogMS4zZW07XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIGgyIHtcbiAgICAgICAgICAgICAgZm9udC1zaXplOiAxZW07XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIC5oYXNoLXJhdGUge1xuICAgICAgICAgICAgICBmb250LXNpemU6IDJlbTtcbiAgICAgICAgICAgICAgZm9udC13ZWlnaHQ6IDYwMDtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgLnVucGFpZCB7XG4gICAgICAgICAgICAgIGZvbnQtc2l6ZTogMS41ZW07XG4gICAgICAgICAgICB9XG4gICAgICAgICAgYH1cbiAgICAgICAgPC9zdHlsZT5cbiAgICAgIDwvZGl2PlxuICAgIClcbiAgfVxufVxuXG5leHBvcnQgZGVmYXVsdCBBcHBcblxuXG5cbi8vIFdFQlBBQ0sgRk9PVEVSIC8vXG4vLyAuL3BhZ2VzP2VudHJ5Il0sIm1hcHBpbmdzIjoiO0E7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBO0FBQ0E7OztBQUFBO0FBQ0E7Ozs7Ozs7O0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBREE7QUFBQTtBQUNBO0FBRUE7QUFDQTtBQURBO0FBRUE7QUFDQTtBQUFBO0FBRkE7QUFJQTs7Ozs7QUFDQTtBQUNBO0FBQ0E7QUFEQTtBQUNBO0FBQ0E7QUFBQTtBQUZBO0FBS0E7QUFDQTtBQUVBOzs7O0FBRUE7QUFDQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQ0E7QUFFQTtBQUNBO0FBREE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUVBOztBQUFBO0FBQ0E7QUFEQTtBQUFBO0FBRUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFDQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUNBOztBQUFBO0FBQUE7QUFBQTtBQUFBOztBQUVBO0FBQ0E7QUFEQTtBQUFBOztBQUNBO0FBQUE7QUFBQTtBQUNBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUNBOztBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUNBOztBQUFBO0FBQUE7QUFBQTtBQUFBOztBQUVBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFaQTtBQTRDQTtBQTVDQTs7Ozs7QUErQ0E7QUFDQTtBQURBO0FBQ0E7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QSIsInNvdXJjZVJvb3QiOiIifQ==
             return { page: comp.default }
           })
         
