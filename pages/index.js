@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-const API = 'https://ether-stats-server-wbffcbisdb.now.sh'
+const API = 'https://etherstats-server.now.sh'
 const WALLET = 'be6Ab449bBa5E9e8E5A81d76D860EFcB4Acaa10F'
 
 class App extends Component {
