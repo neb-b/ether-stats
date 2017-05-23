@@ -50,6 +50,9 @@ var _jsxFileName = '/Users/seanyesmunt/Workspace/ether-stats/pages/index.js?entr
 
 
 var API = 'https://etherstats-server.now.sh';
+// const API = 'http://localhost:5000'
+var FIFTEEN_MINUTES = 900000;
+
 var isAddressLength = function isAddressLength(str) {
 	var regex = /^[a-zA-Z0-9]{40}$/;
 	return regex.test(str);
@@ -74,43 +77,34 @@ var App = function (_Component) {
 			hasMinerStats: false,
 			minerStats: {}
 		};
+
+		_this.fetchStats = _this.fetchStats.bind(_this);
+		_this.fetchStatsInterval = null;
 		return _this;
 	}
 
 	(0, _createClass3.default)(App, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this2 = this;
-
 			var wallet = _jsCookie2.default.get('w__public') || '';
 			var match = isAddressLength(wallet);
 
 			this.setState({ walletInput: wallet });
 
 			if (match) {
-				this.fetch;
-				_axios2.default.get(API + '/' + wallet).then(function (_ref) {
-					var data = _ref.data;
-
-					_this2.setState({
-						wallet: wallet,
-						hasMinerStats: true,
-						minerStats: data,
-						loading: false
-					});
-				}).catch(function (err) {
-					console.log('err', err);
-					_this2.setState({ loading: false });
-				});
+				this.fetchStats(wallet);
 			} else {
 				this.setState({ loading: false });
 			}
 		}
 	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			this.fetchStatsInterval = null;
+		}
+	}, {
 		key: '_handleChange',
 		value: function _handleChange() {
-			var _this3 = this;
-
 			var walletInput = this.state.walletInput;
 
 			var match = isAddressLength(walletInput);
@@ -121,21 +115,7 @@ var App = function (_Component) {
 					error: { input: null },
 					wallet: walletInput
 				});
-
-				_axios2.default.get(API + '/' + walletInput).then(function (_ref2) {
-					var data = _ref2.data;
-
-					console.log('data', data);
-					_this3.setState({
-						hasMinerStats: true,
-						minerStats: data,
-						loading: false
-					});
-					_jsCookie2.default.set('w__public', walletInput);
-				}).catch(function (err) {
-					console.log('err', err);
-					_this3.setState({ loading: false, error: err });
-				});
+				this.fetchStats(walletInput);
 			} else {
 				this.setState({ error: { input: 'Enter a valid wallet' } });
 			}
@@ -144,6 +124,38 @@ var App = function (_Component) {
 		key: '_handleSubmit',
 		value: function _handleSubmit(e) {
 			e.preventDefault();
+		}
+	}, {
+		key: 'fetchStats',
+		value: function fetchStats(wallet) {
+			var _this2 = this;
+
+			_axios2.default.get(API + '/' + wallet).then(function (_ref) {
+				var data = _ref.data;
+
+				_this2.setState({
+					wallet: wallet,
+					hasMinerStats: true,
+					minerStats: data,
+					loading: false
+				});
+
+				if (!_this2.fetchStatsInterval) {
+					_this2.continueToFetchStats(wallet);
+				}
+			}).catch(function (err) {
+				console.log('err', err);
+				_this2.setState({ loading: false });
+			});
+		}
+	}, {
+		key: 'continueToFetchStats',
+		value: function continueToFetchStats(wallet) {
+			var _this3 = this;
+
+			this.fetchStatsInterval = setInterval(function () {
+				return _this3.fetchStats(wallet);
+			}, FIFTEEN_MINUTES);
 		}
 	}, {
 		key: 'render',
@@ -173,23 +185,23 @@ var App = function (_Component) {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 108
+					lineNumber: 115
 				}
 			}, _react2.default.createElement(_head2.default, {
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 109
+					lineNumber: 116
 				}
 			}, _react2.default.createElement('title', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 110
+					lineNumber: 117
 				}
 			}, 'Etherminer.org stats'), _react2.default.createElement('meta', { charSet: 'utf-8', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 111
+					lineNumber: 118
 				}
 			}), _react2.default.createElement('meta', {
 				name: 'viewport',
@@ -197,47 +209,47 @@ var App = function (_Component) {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 112
+					lineNumber: 119
 				}
 			}), _react2.default.createElement('link', { rel: 'stylesheet', type: 'text/css', href: '/static/skeleton.css', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 116
+					lineNumber: 123
 				}
 			})), _react2.default.createElement('div', { className: 'header', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 118
+					lineNumber: 125
 				}
 			}, _react2.default.createElement('h1', { className: 'title', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 119
+					lineNumber: 126
 				}
 			}, 'Ethminer stats')), _react2.default.createElement('div', { className: 'container', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 121
+					lineNumber: 128
 				}
 			}, _react2.default.createElement('form', { className: 'stats-form', onSubmit: this._handleSubmit.bind(this), 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 122
+					lineNumber: 129
 				}
 			}, walletInput && error.input && error.input ? _react2.default.createElement('label', { className: 'error-text', htmlFor: 'wallet-input', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 124
+					lineNumber: 131
 				}
 			}, error.input) : _react2.default.createElement('label', { htmlFor: 'wallet-input', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 127
+					lineNumber: 134
 				}
 			}, 'Your wallet'), _react2.default.createElement('div', { className: 'row', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 128
+					lineNumber: 135
 				}
 			}, _react2.default.createElement('input', {
 				className: 'eight columns',
@@ -250,7 +262,7 @@ var App = function (_Component) {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 129
+					lineNumber: 136
 				}
 			}), _react2.default.createElement('button', {
 				className: 'button-primary four columns',
@@ -260,75 +272,75 @@ var App = function (_Component) {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 136
+					lineNumber: 143
 				}
 			}, 'Get stats'))), loading && _react2.default.createElement('p', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 147
+					lineNumber: 154
 				}
 			}, 'Loading...'), !loading && hasMinerStats && _react2.default.createElement('div', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 151
+					lineNumber: 158
 				}
 			}, _react2.default.createElement('div', { className: 'row', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 152
+					lineNumber: 159
 				}
 			}, _react2.default.createElement('h2', { className: 'six columns hash-rate', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 153
+					lineNumber: 160
 				}
 			}, hashRate), _react2.default.createElement('h3', { className: 'six colums unpaid', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 154
+					lineNumber: 161
 				}
 			}, unpaidEth, ' eth unpaid')), _react2.default.createElement('div', { className: 'stats', 'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 156
+					lineNumber: 163
 				}
 			}, _react2.default.createElement('div', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 157
+					lineNumber: 164
 				}
 			}, 'Currently mining ', _react2.default.createElement('strong', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 158
+					lineNumber: 165
 				}
 			}, ethPerMin), ' eth / minute'), _react2.default.createElement('div', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 160
+					lineNumber: 167
 				}
 			}, 'At the current rate, it will take', ' ', _react2.default.createElement('strong', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 163
+					lineNumber: 170
 				}
 			}, daysForOneEther, ' days'), ' ', 'to mine', ' ', _react2.default.createElement('strong', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 167
+					lineNumber: 174
 				}
 			}, '1 eth')), _react2.default.createElement('div', {
 				'data-jsx': 194912142,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 169
+					lineNumber: 176
 				}
 			}, 'Currently mining $', usdPerMin, ' / min')))), _react2.default.createElement(_style2.default, {
 				styleId: 194912142,

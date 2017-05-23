@@ -4,6 +4,9 @@ import axios from 'axios'
 import cookies from 'js-cookie'
 
 const API = 'https://etherstats-server.now.sh'
+// const API = 'http://localhost:5000'
+const FIFTEEN_MINUTES = 900000
+
 const isAddressLength = str => {
 	const regex = /^[a-zA-Z0-9]{40}$/
 	return regex.test(str)
@@ -24,6 +27,9 @@ class App extends Component {
 			hasMinerStats: false,
 			minerStats: {}
 		}
+
+		this.fetchStats = this.fetchStats.bind(this)
+		this.fetchStatsInterval = null
 	}
 
 	componentDidMount() {
@@ -33,24 +39,14 @@ class App extends Component {
 		this.setState({ walletInput: wallet })
 
 		if (match) {
-			this.fetch
-			axios
-				.get(`${API}/${wallet}`)
-				.then(({ data }) => {
-					this.setState({
-						wallet,
-						hasMinerStats: true,
-						minerStats: data,
-						loading: false
-					})
-				})
-				.catch(err => {
-					console.log('err', err)
-					this.setState({ loading: false })
-				})
+			this.fetchStats(wallet)
 		} else {
 			this.setState({ loading: false })
 		}
+	}
+
+	componentWillUnmount() {
+		this.fetchStatsInterval = null
 	}
 
 	_handleChange() {
@@ -63,22 +59,7 @@ class App extends Component {
 				error: { input: null },
 				wallet: walletInput
 			})
-
-			axios
-				.get(`${API}/${walletInput}`)
-				.then(({ data }) => {
-					console.log('data', data)
-					this.setState({
-						hasMinerStats: true,
-						minerStats: data,
-						loading: false
-					})
-					cookies.set('w__public', walletInput)
-				})
-				.catch(err => {
-					console.log('err', err)
-					this.setState({ loading: false, error: err })
-				})
+			this.fetchStats(walletInput)
 		} else {
 			this.setState({ error: { input: 'Enter a valid wallet' } })
 		}
@@ -86,6 +67,34 @@ class App extends Component {
 
 	_handleSubmit(e) {
 		e.preventDefault()
+	}
+
+	fetchStats(wallet) {
+		axios
+			.get(`${API}/${wallet}`)
+			.then(({ data }) => {
+				this.setState({
+					wallet,
+					hasMinerStats: true,
+					minerStats: data,
+					loading: false
+				})
+
+				if (!this.fetchStatsInterval) {
+					this.continueToFetchStats(wallet)
+				}
+			})
+			.catch(err => {
+				console.log('err', err)
+				this.setState({ loading: false })
+			})
+	}
+
+	continueToFetchStats(wallet) {
+		this.fetchStatsInterval = setInterval(
+			() => this.fetchStats(wallet),
+			FIFTEEN_MINUTES
+		)
 	}
 
 	render() {
