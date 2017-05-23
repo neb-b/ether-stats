@@ -81,11 +81,7 @@ var App = function (_Component) {
 			var wallet = _jsCookie2.default.get('w__public') || '';
 			var match = isAddressLength(wallet);
 
-			console.log('set state');
-
 			this.setState({ walletInput: wallet });
-
-			console.log('after');
 
 			if (match) {
 				this.fetch;
@@ -114,10 +110,13 @@ var App = function (_Component) {
 			var walletInput = this.state.walletInput;
 
 			var match = isAddressLength(walletInput);
-			console.log('match?', match);
 
 			if (match) {
-				this.setState({ loading: true, error: { input: null }, wallet: walletInput });
+				this.setState({
+					loading: true,
+					error: { input: null },
+					wallet: walletInput
+				});
 
 				_axios2.default.get(API + '/' + walletInput).then(function (_ref2) {
 					var data = _ref2.data;
@@ -141,7 +140,6 @@ var App = function (_Component) {
 		value: function render() {
 			var _this4 = this;
 
-			console.log('render', this.state);
 			var _state = this.state,
 			    loading = _state.loading,
 			    error = _state.error,
@@ -164,44 +162,44 @@ var App = function (_Component) {
 			return _react2.default.createElement('div', { className: 'container', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 104
+					lineNumber: 102
 				}
 			}, _react2.default.createElement('div', { className: 'header', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 105
+					lineNumber: 103
 				}
 			}, _react2.default.createElement('h1', { className: 'title', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 106
+					lineNumber: 104
 				}
 			}, 'Ethminer stats')), _react2.default.createElement('div', { className: 'content', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 108
+					lineNumber: 106
 				}
 			}, _react2.default.createElement('h2', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 109
+					lineNumber: 107
 				}
 			}, 'Enter your miner wallet'), _react2.default.createElement('div', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 110
+					lineNumber: 108
 				}
 			}, _react2.default.createElement('div', { className: 'input-container', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 111
+					lineNumber: 109
 				}
 			}, _react2.default.createElement('div', { className: 'form-control', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 112
+					lineNumber: 110
 				}
 			}, _react2.default.createElement('input', {
 				className: 'wallet-input',
@@ -213,95 +211,96 @@ var App = function (_Component) {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 113
+					lineNumber: 111
 				}
 			}), _react2.default.createElement('button', {
 				className: 'get-stats-btn',
 				disabled: this.state.loading,
-				onClick: this._handleChange.bind(this), 'data-jsx': 309376656,
+				onClick: this._handleChange.bind(this),
+				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 119
+					lineNumber: 117
 				}
 			}, 'Get stats')), _react2.default.createElement('div', { className: 'error-text', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 126
+					lineNumber: 125
 				}
 			}, walletInput && error.input && error.input))), loading && _react2.default.createElement('p', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 130
+					lineNumber: 131
 				}
 			}, 'Loading...'), wallet && _react2.default.createElement('div', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 132
+					lineNumber: 133
 				}
 			}, _react2.default.createElement('h2', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 133
+					lineNumber: 134
 				}
 			}, 'Wallet: ', wallet)), !loading && hasMinerStats && _react2.default.createElement('div', { className: 'stats', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 137
+					lineNumber: 138
 				}
 			}, _react2.default.createElement('div', { className: 'hash-rate', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 138
+					lineNumber: 139
 				}
 			}, hashRate), _react2.default.createElement('div', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 139
+					lineNumber: 140
 				}
 			}, 'Currently mining ', _react2.default.createElement('strong', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 140
+					lineNumber: 141
 				}
 			}, ethPerMin), ' eth / minute'), _react2.default.createElement('div', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 142
+					lineNumber: 143
 				}
 			}, 'At the current rate, it will take', ' ', _react2.default.createElement('strong', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 145
+					lineNumber: 146
 				}
 			}, daysForOneEther, ' days'), ' ', 'to mine', ' ', _react2.default.createElement('strong', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 149
+					lineNumber: 150
 				}
 			}, '1 eth')), _react2.default.createElement('div', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 151
+					lineNumber: 152
 				}
 			}, 'Currently mining $', usdPerMin, ' / min'), _react2.default.createElement('div', { className: 'unpaid', 'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 153
+					lineNumber: 154
 				}
 			}, 'Unpaid balance: ', _react2.default.createElement('strong', {
 				'data-jsx': 309376656,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 154
+					lineNumber: 155
 				}
 			}, unpaidEth), ' eth'))), _react2.default.createElement(_style2.default, {
 				styleId: 309376656,

@@ -29,11 +29,7 @@ class App extends Component {
 		const wallet = cookies.get('w__public') || ''
 		const match = isAddressLength(wallet)
 
-		console.log('set state')
-
 		this.setState({ walletInput: wallet })
-
-		console.log('after')
 
 		if (match) {
 			this.fetch
@@ -59,7 +55,6 @@ class App extends Component {
 	_handleChange() {
 		const { walletInput } = this.state
 		const match = isAddressLength(walletInput)
-		console.log('match?', match)
 
 		if (match) {
 			this.setState({
@@ -88,7 +83,6 @@ class App extends Component {
 	}
 
 	render() {
-		console.log('render', this.state)
 		const {
 			loading,
 			error,
