@@ -165,7 +165,10 @@ class App extends Component {
 						hasMinerStats &&
 						<div>
 							<div className="row">
-								<div className="six columns hash-rates-container">
+								<div className="seven columns unpaid">
+									{unpaidEth} eth unpaid
+								</div>
+								<div className="five columns hash-rates-container">
 									<div>
 										<span className="hash-rate">
 											{hashRate}
@@ -182,7 +185,6 @@ class App extends Component {
 										</span> 24 hour average
 									</div>
 								</div>
-								<h3 className="six colums unpaid">{unpaidEth} eth unpaid</h3>
 							</div>
 							<div className="stats">
 								<div>
@@ -231,18 +233,18 @@ class App extends Component {
 							padding-top: 20px;
 						}
 
-						.unpaid {
-							text-align: right;
+						.hash-rates-container {
+							text-align: left;
 						}
 
 						@media (max-width: 550px) {
 							.get-stats-submit {
 								width: 100%;
 							}
+						}
 
-							.unpaid {
-								text-align: left;
-							}
+						.unpaid {
+							font-size: 2.5em;
 						}
 
 						.error-text {
@@ -251,8 +253,11 @@ class App extends Component {
 
 						.stats {
 							font-size: 1.2em;
-							font-weight: 300;
 							padding-top: 30px;
+						}
+
+						.stats div {
+							padding-top: 10px;
 						}
 
 						.hash-rate {
