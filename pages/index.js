@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import cookies from 'js-cookie'
 
 const API = 'https://etherstats-server.now.sh'
-const WALLET = 'be6Ab449bBa5E9e8E5A81d76D860EFcB4Acaa10F'
 
 class App extends Component {
 	constructor() {
@@ -11,26 +11,73 @@ class App extends Component {
 		this.state = {
 			loading: true,
 			error: false,
-			data: {}
+			walletInput: '',
+			wallet: '',
+			hasMinerStats: false,
+			minerStats: {}
 		}
 	}
+
 	componentDidMount() {
-		axios
-			.get(`${API}/${WALLET}`)
-			.then(({ data }) => {
-				this.setState({ data, loading: false })
-			})
-			.catch(err => {
-				console.log('err', err)
-				this.setState({ loading: false, error: err })
-			})
+		const wallet = cookies.get('w__public') || ''
+
+		this.setState({ walletInput: wallet })
+
+		const regex = /(\D|\d){40}/
+		const match = wallet.match(regex)
+
+		if (match) {
+			console.log('match?', match)
+			axios
+				.get(`${API}/${wallet}`)
+				.then(({ data }) => {
+					this.setState({
+						wallet,
+						hasMinerStats: true,
+						minerStats: data,
+						loading: false
+					})
+				})
+				.catch(err => {
+					console.log('err', err)
+					this.setState({ loading: false, error: err })
+				})
+		} else {
+			this.setState({ loading: false })
+		}
+	}
+
+	getStats() {
+		const { walletInput } = this.state
+		const match = walletInput.match(/(\D|\d){40}/)
+		if (match) {
+			this.setState({ loading: true, wallet: walletInput })
+
+			axios
+				.get(`${API}/${walletInput}`)
+				.then(({ data }) => {
+					this.setState({
+						hasMinerStats: true,
+						minerStats: data,
+						loading: false
+					})
+					cookies.set('w__public', walletInput)
+				})
+				.catch(err => {
+					console.log('err', err)
+					this.setState({ loading: false, error: err })
+				})
+		}
 	}
 
 	render() {
+		console.log('render', this.state)
 		const {
 			loading,
 			error,
-			data: { hashRate, ethPerMin, usdPerMin, unpaid }
+			hasMinerStats,
+			wallet,
+			minerStats: { hashRate, ethPerMin, usdPerMin, unpaid }
 		} = this.state
 
 		// not sure why they give us unpaid in this format
@@ -43,9 +90,22 @@ class App extends Component {
 			<div className="container">
 				{error && error.message}
 				<h1>Ethminer stats</h1>
-				<h2>Wallet: {WALLET}</h2>
+				<div>
+					<label>Wallet</label>
+					<input
+						value={this.state.walletInput}
+						onChange={e => this.setState({ walletInput: e.target.value })}
+					/>
+					<button onClick={this.getStats.bind(this)}>Get stats</button>
+				</div>
+
 				{loading && <p>Loading...</p>}
+				{wallet &&
+					<div>
+						<h2>Wallet: {wallet}</h2>
+					</div>}
 				{!loading &&
+					hasMinerStats &&
 					<div className="stats">
 						<div className="hash-rate">{hashRate}</div>
 						<div>
