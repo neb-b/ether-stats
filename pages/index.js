@@ -121,10 +121,10 @@ class App extends Component {
 				<div className="container">
 					<form className="stats-form" onSubmit={this._handleSubmit.bind(this)}>
 						{walletInput && error.input && error.input
-							? <label className="error-text" for="wallet-input">
+							? <label className="error-text" htmlFor="wallet-input">
 									{error.input}
 								</label>
-							: <label for="wallet-input">Your wallet</label>}
+							: <label htmlFor="wallet-input">Your wallet</label>}
 						<div className="row">
 							<input
 								className="eight columns"
