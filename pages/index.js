@@ -49,11 +49,13 @@ class App extends Component {
 		this.fetchStatsInterval = null
 	}
 
-	_handleChange() {
+	_handleSubmit(e) {
+		e.preventDefault()
 		const { walletInput } = this.state
 		const match = isAddressLength(walletInput)
 
 		if (match) {
+			cookies.set('w__public', walletInput)
 			this.setState({
 				loading: true,
 				error: { input: null },
@@ -65,14 +67,11 @@ class App extends Component {
 		}
 	}
 
-	_handleSubmit(e) {
-		e.preventDefault()
-	}
-
 	fetchStats(wallet) {
 		axios
 			.get(`${API}/${wallet}`)
 			.then(({ data }) => {
+				console.log('dat', data)
 				this.setState({
 					wallet,
 					hasMinerStats: true,
@@ -85,7 +84,7 @@ class App extends Component {
 				}
 			})
 			.catch(err => {
-				console.log('err', err)
+				console.error(err)
 				this.setState({ loading: false })
 			})
 	}
@@ -104,7 +103,14 @@ class App extends Component {
 			hasMinerStats,
 			wallet,
 			walletInput,
-			minerStats: { hashRate, ethPerMin, usdPerMin, unpaid }
+			minerStats: {
+				hashRate,
+				ethPerMin,
+				usdPerMin,
+				unpaid,
+				reportedHashRate,
+				avgHashrate
+			}
 		} = this.state
 
 		// not sure why they give us unpaid in this format
@@ -125,7 +131,7 @@ class App extends Component {
 					<link rel="stylesheet" type="text/css" href="/static/skeleton.css" />
 				</Head>
 				<div className="header">
-					<h1 className="title">Ethminer stats</h1>
+					<h1 className="title">Ethermine stats</h1>
 				</div>
 				<div className="container">
 					<form className="stats-form" onSubmit={this._handleSubmit.bind(this)}>
@@ -146,7 +152,7 @@ class App extends Component {
 								className="button-primary four columns"
 								type="submit"
 								disabled={this.state.loading}
-								onClick={this._handleChange.bind(this)}
+								onClick={this._handleSubmit.bind(this)}
 							>
 								Get stats
 							</button>
@@ -159,7 +165,23 @@ class App extends Component {
 						hasMinerStats &&
 						<div>
 							<div className="row">
-								<h2 className="six columns hash-rate">{hashRate}</h2>
+								<div className="six columns hash-rates-container">
+									<div>
+										<span className="hash-rate">
+											{hashRate}
+										</span> actual
+									</div>
+									<div>
+										<span className="hash-rate">
+											{reportedHashRate}
+										</span> reported
+									</div>
+									<div>
+										<span className="hash-rate">
+											{avgHashrate}
+										</span> 24 hour average
+									</div>
+								</div>
 								<h3 className="six colums unpaid">{unpaidEth} eth unpaid</h3>
 							</div>
 							<div className="stats">
@@ -229,6 +251,12 @@ class App extends Component {
 
 						.stats {
 							font-size: 1.2em;
+							font-weight: 300;
+							padding-top: 30px;
+						}
+
+						.hash-rate {
+							font-size: 2em;
 						}
           `}
 				</style>

@@ -103,13 +103,15 @@ var App = function (_Component) {
 			this.fetchStatsInterval = null;
 		}
 	}, {
-		key: '_handleChange',
-		value: function _handleChange() {
+		key: '_handleSubmit',
+		value: function _handleSubmit(e) {
+			e.preventDefault();
 			var walletInput = this.state.walletInput;
 
 			var match = isAddressLength(walletInput);
 
 			if (match) {
+				_jsCookie2.default.set('w__public', walletInput);
 				this.setState({
 					loading: true,
 					error: { input: null },
@@ -121,11 +123,6 @@ var App = function (_Component) {
 			}
 		}
 	}, {
-		key: '_handleSubmit',
-		value: function _handleSubmit(e) {
-			e.preventDefault();
-		}
-	}, {
 		key: 'fetchStats',
 		value: function fetchStats(wallet) {
 			var _this2 = this;
@@ -133,6 +130,7 @@ var App = function (_Component) {
 			_axios2.default.get(API + '/' + wallet).then(function (_ref) {
 				var data = _ref.data;
 
+				console.log('dat', data);
 				_this2.setState({
 					wallet: wallet,
 					hasMinerStats: true,
@@ -144,7 +142,7 @@ var App = function (_Component) {
 					_this2.continueToFetchStats(wallet);
 				}
 			}).catch(function (err) {
-				console.log('err', err);
+				console.error(err);
 				_this2.setState({ loading: false });
 			});
 		}
@@ -172,7 +170,9 @@ var App = function (_Component) {
 			    hashRate = _state$minerStats.hashRate,
 			    ethPerMin = _state$minerStats.ethPerMin,
 			    usdPerMin = _state$minerStats.usdPerMin,
-			    unpaid = _state$minerStats.unpaid;
+			    unpaid = _state$minerStats.unpaid,
+			    reportedHashRate = _state$minerStats.reportedHashRate,
+			    avgHashrate = _state$minerStats.avgHashrate;
 
 			// not sure why they give us unpaid in this format
 
@@ -182,74 +182,74 @@ var App = function (_Component) {
 			var daysForOneEther = (hoursForOneEther / 24).toFixed(0);
 
 			return _react2.default.createElement('div', {
-				'data-jsx': 194912142,
-				__source: {
-					fileName: _jsxFileName,
-					lineNumber: 115
-				}
-			}, _react2.default.createElement(_head2.default, {
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 116
 				}
-			}, _react2.default.createElement('title', {
-				'data-jsx': 194912142,
+			}, _react2.default.createElement(_head2.default, {
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 117
 				}
-			}, 'Etherminer.org stats'), _react2.default.createElement('meta', { charSet: 'utf-8', 'data-jsx': 194912142,
+			}, _react2.default.createElement('title', {
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 118
 				}
-			}), _react2.default.createElement('meta', {
-				name: 'viewport',
-				content: 'initial-scale=1.0, width=device-width',
-				'data-jsx': 194912142,
+			}, 'Etherminer.org stats'), _react2.default.createElement('meta', { charSet: 'utf-8', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 119
 				}
-			}), _react2.default.createElement('link', { rel: 'stylesheet', type: 'text/css', href: '/static/skeleton.css', 'data-jsx': 194912142,
+			}), _react2.default.createElement('meta', {
+				name: 'viewport',
+				content: 'initial-scale=1.0, width=device-width',
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 123
+					lineNumber: 120
 				}
-			})), _react2.default.createElement('div', { className: 'header', 'data-jsx': 194912142,
+			}), _react2.default.createElement('link', { rel: 'stylesheet', type: 'text/css', href: '/static/skeleton.css', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 125
+					lineNumber: 124
 				}
-			}, _react2.default.createElement('h1', { className: 'title', 'data-jsx': 194912142,
+			})), _react2.default.createElement('div', { className: 'header', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 126
 				}
-			}, 'Ethminer stats')), _react2.default.createElement('div', { className: 'container', 'data-jsx': 194912142,
+			}, _react2.default.createElement('h1', { className: 'title', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 128
+					lineNumber: 127
 				}
-			}, _react2.default.createElement('form', { className: 'stats-form', onSubmit: this._handleSubmit.bind(this), 'data-jsx': 194912142,
+			}, 'Ethermine stats')), _react2.default.createElement('div', { className: 'container', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 129
 				}
-			}, walletInput && error.input && error.input ? _react2.default.createElement('label', { className: 'error-text', htmlFor: 'wallet-input', 'data-jsx': 194912142,
+			}, _react2.default.createElement('form', { className: 'stats-form', onSubmit: this._handleSubmit.bind(this), 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 131
+					lineNumber: 130
 				}
-			}, error.input) : _react2.default.createElement('label', { htmlFor: 'wallet-input', 'data-jsx': 194912142,
+			}, walletInput && error.input && error.input ? _react2.default.createElement('label', { className: 'error-text', htmlFor: 'wallet-input', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 134
+					lineNumber: 132
 				}
-			}, 'Your wallet'), _react2.default.createElement('div', { className: 'row', 'data-jsx': 194912142,
+			}, error.input) : _react2.default.createElement('label', { htmlFor: 'wallet-input', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 135
+				}
+			}, 'Your wallet'), _react2.default.createElement('div', { className: 'row', 'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 136
 				}
 			}, _react2.default.createElement('input', {
 				className: 'eight columns',
@@ -259,92 +259,125 @@ var App = function (_Component) {
 				onChange: function onChange(e) {
 					return _this4.setState({ walletInput: e.target.value });
 				},
-				'data-jsx': 194912142,
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 136
+					lineNumber: 137
 				}
 			}), _react2.default.createElement('button', {
 				className: 'button-primary four columns',
 				type: 'submit',
 				disabled: this.state.loading,
-				onClick: this._handleChange.bind(this),
-				'data-jsx': 194912142,
+				onClick: this._handleSubmit.bind(this),
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 143
+					lineNumber: 144
 				}
 			}, 'Get stats'))), loading && _react2.default.createElement('p', {
-				'data-jsx': 194912142,
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 154
+					lineNumber: 155
 				}
 			}, 'Loading...'), !loading && hasMinerStats && _react2.default.createElement('div', {
-				'data-jsx': 194912142,
-				__source: {
-					fileName: _jsxFileName,
-					lineNumber: 158
-				}
-			}, _react2.default.createElement('div', { className: 'row', 'data-jsx': 194912142,
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 159
 				}
-			}, _react2.default.createElement('h2', { className: 'six columns hash-rate', 'data-jsx': 194912142,
+			}, _react2.default.createElement('div', { className: 'row', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 160
 				}
-			}, hashRate), _react2.default.createElement('h3', { className: 'six colums unpaid', 'data-jsx': 194912142,
+			}, _react2.default.createElement('div', { className: 'six columns hash-rates-container', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 161
 				}
-			}, unpaidEth, ' eth unpaid')), _react2.default.createElement('div', { className: 'stats', 'data-jsx': 194912142,
+			}, _react2.default.createElement('div', {
+				'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 162
+				}
+			}, _react2.default.createElement('span', { className: 'hash-rate', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 163
 				}
-			}, _react2.default.createElement('div', {
-				'data-jsx': 194912142,
+			}, hashRate), ' actual'), _react2.default.createElement('div', {
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 164
+					lineNumber: 166
 				}
-			}, 'Currently mining ', _react2.default.createElement('strong', {
-				'data-jsx': 194912142,
-				__source: {
-					fileName: _jsxFileName,
-					lineNumber: 165
-				}
-			}, ethPerMin), ' eth / minute'), _react2.default.createElement('div', {
-				'data-jsx': 194912142,
+			}, _react2.default.createElement('span', { className: 'hash-rate', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 167
 				}
-			}, 'At the current rate, it will take', ' ', _react2.default.createElement('strong', {
-				'data-jsx': 194912142,
+			}, reportedHashRate), ' reported'), _react2.default.createElement('div', {
+				'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 170
 				}
-			}, daysForOneEther, ' days'), ' ', 'to mine', ' ', _react2.default.createElement('strong', {
-				'data-jsx': 194912142,
+			}, _react2.default.createElement('span', { className: 'hash-rate', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
-					lineNumber: 174
+					lineNumber: 171
 				}
-			}, '1 eth')), _react2.default.createElement('div', {
-				'data-jsx': 194912142,
+			}, avgHashrate), ' 24 hour average')), _react2.default.createElement('h3', { className: 'six colums unpaid', 'data-jsx': 856168547,
 				__source: {
 					fileName: _jsxFileName,
 					lineNumber: 176
 				}
+			}, unpaidEth, ' eth unpaid')), _react2.default.createElement('div', { className: 'stats', 'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 178
+				}
+			}, _react2.default.createElement('div', {
+				'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 179
+				}
+			}, 'Currently mining ', _react2.default.createElement('strong', {
+				'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 180
+				}
+			}, ethPerMin), ' eth / minute'), _react2.default.createElement('div', {
+				'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 182
+				}
+			}, 'At the current rate, it will take', ' ', _react2.default.createElement('strong', {
+				'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 185
+				}
+			}, daysForOneEther, ' days'), ' ', 'to mine', ' ', _react2.default.createElement('strong', {
+				'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 189
+				}
+			}, '1 eth')), _react2.default.createElement('div', {
+				'data-jsx': 856168547,
+				__source: {
+					fileName: _jsxFileName,
+					lineNumber: 191
+				}
 			}, 'Currently mining $', usdPerMin, ' / min')))), _react2.default.createElement(_style2.default, {
-				styleId: 194912142,
-				css: '\n\t\t\t\t\t\tbody, h1 {\n\t\t\t\t\t\t\tpadding: 0;\n\t\t\t\t\t\t\tmargin: 0;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tinput {\n\t\t\t\t\t\t\theight: 38px;\n\t\t\t\t\t    padding: 6px 10px;\n\t\t\t\t\t    background-color: #fff;\n\t\t\t\t\t    border: 1px solid #D1D1D1;\n\t\t\t\t\t    border-radius: 4px;\n\t\t\t\t\t    box-shadow: none;\n\t\t\t\t\t    box-sizing: border-box;\n\t\t\t\t\t\t\tfont-size: 2rem;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.header {\n\t\t\t\t\t\t\twidth: 100%;\n\t\t\t\t\t\t\theight: 4em;\n\t\t\t\t\t\t\tcolor: white;\n\t\t\t\t\t\t\tbackground-color: #663f91;\n\t\t\t\t\t\t\tpadding: 10px;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.stats-form {\n\t\t\t\t\t\t\tpadding-top: 20px;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.unpaid {\n\t\t\t\t\t\t\ttext-align: right;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t@media (max-width: 550px) {\n\t\t\t\t\t\t\t.get-stats-submit {\n\t\t\t\t\t\t\t\twidth: 100%;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t.unpaid {\n\t\t\t\t\t\t\t\ttext-align: left;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.error-text {\n\t\t\t\t\t\t\tcolor: red;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.stats {\n\t\t\t\t\t\t\tfont-size: 1.2em;\n\t\t\t\t\t\t}\n          '
+				styleId: 856168547,
+				css: '\n\t\t\t\t\t\tbody, h1 {\n\t\t\t\t\t\t\tpadding: 0;\n\t\t\t\t\t\t\tmargin: 0;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tinput {\n\t\t\t\t\t\t\theight: 38px;\n\t\t\t\t\t    padding: 6px 10px;\n\t\t\t\t\t    background-color: #fff;\n\t\t\t\t\t    border: 1px solid #D1D1D1;\n\t\t\t\t\t    border-radius: 4px;\n\t\t\t\t\t    box-shadow: none;\n\t\t\t\t\t    box-sizing: border-box;\n\t\t\t\t\t\t\tfont-size: 2rem;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.header {\n\t\t\t\t\t\t\twidth: 100%;\n\t\t\t\t\t\t\theight: 4em;\n\t\t\t\t\t\t\tcolor: white;\n\t\t\t\t\t\t\tbackground-color: #663f91;\n\t\t\t\t\t\t\tpadding: 10px;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.stats-form {\n\t\t\t\t\t\t\tpadding-top: 20px;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.unpaid {\n\t\t\t\t\t\t\ttext-align: right;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t@media (max-width: 550px) {\n\t\t\t\t\t\t\t.get-stats-submit {\n\t\t\t\t\t\t\t\twidth: 100%;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t.unpaid {\n\t\t\t\t\t\t\t\ttext-align: left;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.error-text {\n\t\t\t\t\t\t\tcolor: red;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.stats {\n\t\t\t\t\t\t\tfont-size: 1.2em;\n\t\t\t\t\t\t\tfont-weight: 300;\n\t\t\t\t\t\t\tpadding-top: 30px;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\t.hash-rate {\n\t\t\t\t\t\t\tfont-size: 2em;\n\t\t\t\t\t\t}\n          '
 			}));
 		}
 	}]);
