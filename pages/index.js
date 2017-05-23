@@ -3,6 +3,10 @@ import axios from 'axios'
 import cookies from 'js-cookie'
 
 const API = 'https://etherstats-server.now.sh'
+const isAddressLength = str => {
+	const regex = /^[a-zA-Z0-9]{40}$/
+	return regex.test(str)
+}
 
 class App extends Component {
 	constructor() {
@@ -10,7 +14,10 @@ class App extends Component {
 
 		this.state = {
 			loading: true,
-			error: false,
+			error: {
+				input: null,
+				dataFetching: null
+			},
 			walletInput: '',
 			wallet: '',
 			hasMinerStats: false,
@@ -20,14 +27,16 @@ class App extends Component {
 
 	componentDidMount() {
 		const wallet = cookies.get('w__public') || ''
+		const match = isAddressLength(wallet)
+
+		console.log('set state')
 
 		this.setState({ walletInput: wallet })
 
-		const regex = /(\D|\d){40}/
-		const match = wallet.match(regex)
+		console.log('after')
 
 		if (match) {
-			console.log('match?', match)
+			this.fetch
 			axios
 				.get(`${API}/${wallet}`)
 				.then(({ data }) => {
@@ -40,18 +49,24 @@ class App extends Component {
 				})
 				.catch(err => {
 					console.log('err', err)
-					this.setState({ loading: false, error: err })
+					this.setState({ loading: false })
 				})
 		} else {
 			this.setState({ loading: false })
 		}
 	}
 
-	getStats() {
+	_handleChange() {
 		const { walletInput } = this.state
-		const match = walletInput.match(/(\D|\d){40}/)
+		const match = isAddressLength(walletInput)
+		console.log('match?', match)
+
 		if (match) {
-			this.setState({ loading: true, wallet: walletInput })
+			this.setState({
+				loading: true,
+				error: { input: null },
+				wallet: walletInput
+			})
 
 			axios
 				.get(`${API}/${walletInput}`)
@@ -67,6 +82,8 @@ class App extends Component {
 					console.log('err', err)
 					this.setState({ loading: false, error: err })
 				})
+		} else {
+			this.setState({ error: { input: 'Enter a valid wallet' } })
 		}
 	}
 
@@ -77,6 +94,7 @@ class App extends Component {
 			error,
 			hasMinerStats,
 			wallet,
+			walletInput,
 			minerStats: { hashRate, ethPerMin, usdPerMin, unpaid }
 		} = this.state
 
@@ -88,50 +106,120 @@ class App extends Component {
 
 		return (
 			<div className="container">
-				{error && error.message}
-				<h1>Ethminer stats</h1>
-				<div>
-					<label>Wallet</label>
-					<input
-						value={this.state.walletInput}
-						onChange={e => this.setState({ walletInput: e.target.value })}
-					/>
-					<button onClick={this.getStats.bind(this)}>Get stats</button>
+				<div className="header">
+					<h1 className="title">Ethminer stats</h1>
 				</div>
-
-				{loading && <p>Loading...</p>}
-				{wallet &&
+				<div className="content">
+					<h2>Enter your miner wallet</h2>
 					<div>
-						<h2>Wallet: {wallet}</h2>
-					</div>}
-				{!loading &&
-					hasMinerStats &&
-					<div className="stats">
-						<div className="hash-rate">{hashRate}</div>
-						<div>
-							Currently mining <strong>{ethPerMin}</strong> eth / minute
+						<div className="input-container">
+							<div className="form-control">
+								<input
+									className="wallet-input"
+									placeholder="be6Ab449bBa5E9e8E5A81d76D860EFcB4Acaa10F"
+									value={walletInput}
+									onChange={e => this.setState({ walletInput: e.target.value })}
+								/>
+								<button
+									className="get-stats-btn"
+									disabled={this.state.loading}
+									onClick={this._handleChange.bind(this)}
+								>
+									Get stats
+								</button>
+							</div>
+							<div className="error-text">
+								{walletInput && error.input && error.input}
+							</div>
 						</div>
-						<div>
-							At the current rate, it will take
-							{' '}
-							<strong>{daysForOneEther} days</strong>
-							{' '}
-							to mine
-							{' '}
-							<strong>1 eth</strong>
-						</div>
-						<div>Currently mining ${usdPerMin} / min</div>
+					</div>
 
-						<div className="unpaid">
-							Unpaid balance: <strong>{unpaidEth}</strong> eth
-						</div>
-					</div>}
-				<style jsx>
+					{loading && <p>Loading...</p>}
+					{wallet &&
+						<div>
+							<h2>Wallet: {wallet}</h2>
+						</div>}
+					{!loading &&
+						hasMinerStats &&
+						<div className="stats">
+							<div className="hash-rate">{hashRate}</div>
+							<div>
+								Currently mining <strong>{ethPerMin}</strong> eth / minute
+							</div>
+							<div>
+								At the current rate, it will take
+								{' '}
+								<strong>{daysForOneEther} days</strong>
+								{' '}
+								to mine
+								{' '}
+								<strong>1 eth</strong>
+							</div>
+							<div>Currently mining ${usdPerMin} / min</div>
+
+							<div className="unpaid">
+								Unpaid balance: <strong>{unpaidEth}</strong> eth
+							</div>
+						</div>}
+				</div>
+				<style global jsx>
 					{`
-            .container {
+						body, h1 {
+							padding: 0;
+							margin: 0;
+						}
+
+						.header {
+							width: 100%;
+							height: 4em;
+							color: white;
+							background-color: #315c39;
+							padding: 10px;
+						}
+
+						.title {
+							font-weight: 400;
+							font-size: 2em;
+							padding-top: 10px;
+						}
+
+						.container {
+							margin: 0;
+							padding: 0;
+							font-family: Helvetica, sans-serif;
+						}
+
+
+            .content {
               padding: 10px;
-              font-family: Helvetica, sans-serif;
             }
+
+						.form-control {
+							display: flex;
+							flex-direction: row;
+						}
+
+						.error-text {
+							color: red;
+							height: 1.5rem;
+							padding-top: 5px;
+							font-size: .9em;
+						}
+
+						.wallet-input {
+							padding: 6px;
+							width: 600px;
+							font-size: 1em;
+						}
+
+						.get-stats-btn {
+							margin-left: 10px;
+							padding: 10px;
+							width: 100px;
+							border: none;
+							cursor: pointer;
+						}
+
             .stats div {
               padding: 20px 0;
             }
