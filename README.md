@@ -1,5 +1,5 @@
 ### What is this?
 
-This is a project for fun to display miner data from etherminer.org
+This is a project for fun to display miner data from ethermine.org
 
-(etherstats.xyz)[https://etherstats.xyz]
+https://etherstats.xyz
